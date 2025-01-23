@@ -1,21 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import About from './pages/About';
-import Contact from './pages/Contact';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import TaskListView from './components/TaskListView';
+import TaskBoardView from './components/TaskBoardView';
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/list" element={<TaskListView />} />
+        <Route path="/board" element={<TaskBoardView />} />
+        <Route path="/" element={<Navigate to="/list" replace />} />
+      </Routes>
     </Router>
   );
 }
