@@ -17,7 +17,7 @@ const firebaseConfig = {
   storageBucket: "task-management-tool-b7088.firebasestorage.app",
   messagingSenderId: "275859467827",
   appId: "1:275859467827:web:d3c3de5ed3fe934c013d46",
-  measurementId: "G-YE22NX2T5X"
+  measurementId: "G-YE22NX2T5X",
 };
 
 const app = initializeApp(firebaseConfig);
