@@ -1,6 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("User logged in successfully");
+      navigate("/list");
+
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8">
@@ -37,7 +55,7 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
 
-          <form className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label htmlFor="email" className="sr-only">
                 Email address
@@ -46,6 +64,8 @@ const LoginPage: React.FC = () => {
                 id="email"
                 name="email"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 required
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
@@ -60,6 +80,8 @@ const LoginPage: React.FC = () => {
                 id="password"
                 name="password"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 required
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
@@ -97,7 +119,7 @@ const LoginPage: React.FC = () => {
 
           <p className="text-center text-sm text-gray-600">
             Don't have an account?{' '}
-            <a href="#" className="font-medium text-purple-600 hover:text-purple-500">
+            <a href="/" className="font-medium text-purple-600 hover:text-purple-500">
               Sign up
             </a>
           </p>

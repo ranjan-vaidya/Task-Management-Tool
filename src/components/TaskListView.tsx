@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TaskModal from './TaskModal';
+import { useAuth } from '../hooks/useAuth';
 
 interface Task {
   id: string;
@@ -13,7 +14,9 @@ interface Task {
 const TaskListView: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const user = useAuth();
+  console.log(user.user, "user")
+
   const [tasks, setTasks] = useState<Task[]>([
     { id: '1', title: 'Interview with Design Team', dueDate: 'Today', status: 'TO-DO', category: 'Work' },
     { id: '2', title: 'Team Meeting', dueDate: '30 Dec, 2024', status: 'TO-DO', category: 'Personal' },
@@ -29,8 +32,8 @@ const TaskListView: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
     'TO-DO': true,
-    'IN-PROGRESS': true,
-    'COMPLETED': true,
+    'IN-PROGRESS': false,
+    'COMPLETED': false,
   });
 
   const handleAddTask = (newTask: Omit<Task, 'id'>) => {
@@ -58,7 +61,7 @@ const TaskListView: React.FC = () => {
     bgColor: string;
   }> = ({ title, status, tasks, bgColor }) => (
     <div className="mb-6">
-      <div 
+      <div
         className={`flex items-center justify-between p-3 ${bgColor} rounded-lg ${!expandedSections[status] ? 'rounded-b-lg' : 'rounded-b-none'} cursor-pointer transition-colors hover:bg-opacity-90`}
         onClick={() => toggleSection(status)}
       >
@@ -84,11 +87,10 @@ const TaskListView: React.FC = () => {
                   </div>
                   <div className="flex items-center space-x-4 mt-2">
                     <span className="text-xs text-gray-500">{task.dueDate}</span>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      task.status === 'TO-DO' ? 'bg-gray-100' :
-                      task.status === 'IN-PROGRESS' ? 'bg-blue-100 text-blue-800' :
-                      'bg-green-100 text-green-800'
-                    }`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${task.status === 'TO-DO' ? 'bg-gray-100' :
+                        task.status === 'IN-PROGRESS' ? 'bg-blue-100 text-blue-800' :
+                          'bg-green-100 text-green-800'
+                      }`}>
                       {task.status}
                     </span>
                     <span className="text-xs text-gray-600">{task.category}</span>
@@ -105,17 +107,36 @@ const TaskListView: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="grid grid-cols-6 gap-4 mb-4">
+  <div className="col-span-2">
+    <h1 className="text-xl font-bold">TaskBuddy</h1>
+  </div>
+  <div className="col-span-2 col-start-5 flex justify-end">
+    
+    <div>
+      <img
+        src="../../public/img/me.jpg"
+        alt="user"
+        className="h-8 w-8 rounded-full"
+      />
+    </div>
+    <div className='ms-3'>
+      User Name
+    </div>
+  </div>
+</div>
+
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-bold">TaskBuddy</h1>
+
             <div className="flex space-x-2">
-              <button 
+              <button
                 onClick={() => navigate('/list')}
                 className={`px-3 py-1 rounded-md ${location.pathname === '/list' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
               >
                 List
               </button>
-              <button 
+              <button
                 onClick={() => navigate('/board')}
                 className={`px-3 py-1 rounded-md ${location.pathname === '/board' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
               >

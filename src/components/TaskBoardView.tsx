@@ -71,17 +71,34 @@ const TaskBoardView: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="grid grid-cols-6 gap-4 mb-4">
+  <div className="col-span-2">
+    <h1 className="text-xl font-bold">TaskBuddy</h1>
+  </div>
+  <div className="col-span-2 col-start-5 flex justify-end">
+    
+    <div>
+      <img
+        src="../../public/img/me.jpg"
+        alt="user"
+        className="h-8 w-8 rounded-full"
+      />
+    </div>
+    <div className='ms-3'>
+      User Name
+    </div>
+  </div>
+</div>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-bold">TaskBuddy</h1>
             <div className="flex space-x-2">
-              <button 
+              <button
                 onClick={() => navigate('/list')}
                 className={`px-3 py-1 rounded-md ${location.pathname === '/list' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
               >
                 List
               </button>
-              <button 
+              <button
                 onClick={() => navigate('/board')}
                 className={`px-3 py-1 rounded-md ${location.pathname === '/board' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
               >
