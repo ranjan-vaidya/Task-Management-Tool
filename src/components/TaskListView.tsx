@@ -19,6 +19,14 @@ const TaskListView: React.FC = () => {
   const { user, loading, signInWithGoogle, signOutUser } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [reload, setReload] = useState<Boolean>(true);
+  const storedUserString = localStorage.getItem("user");
+if (storedUserString) {
+  const storedUser = JSON.parse(storedUserString);
+  console.log("Stored User:", storedUser);
+} else {
+  console.log("No user found in localStorage");
+}
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState({

@@ -31,6 +31,8 @@ export const useAuth = () => {
       const user = result.user;
       console.log("User signed in with Google:", user);
       setUser(user);
+      localStorage.setItem("user", JSON.stringify(user.uid));
+      // console.log(user.uid)
       navigate("/list");
     } catch (error) {
       console.error("Google sign-in error:", error);

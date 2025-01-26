@@ -82,6 +82,7 @@ const TaskBoardView: React.FC = () => {
     },
   ]);
 
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user, loading, signInWithGoogle, signOutUser } = useAuth();
   console.log(user, "user");

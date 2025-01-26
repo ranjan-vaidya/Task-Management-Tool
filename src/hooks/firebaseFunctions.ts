@@ -11,6 +11,15 @@ import { auth } from "../firebase";
 
 const db = getFirestore();
 
+
+const storedUserString = localStorage.getItem("user");
+if (storedUserString) {
+  var storedUser = JSON.parse(storedUserString);
+  console.log("Stored User:", storedUser);
+} else {
+  console.log("No user found in localStorage");
+}
+
 export const addTask = async (taskData: {
   title: string;
   description: string;
@@ -20,6 +29,7 @@ export const addTask = async (taskData: {
 }) => {
   try {
     const userId = auth.currentUser?.uid;
+    // console.log(userId)
     if (!userId) throw new Error("User is not logged in");
 
     // Reference to the tasks collection for the current user

@@ -32,6 +32,7 @@ const LoginPage: React.FC = () => {
           </p>
         </div>
 
+
         <div className="mt-8 space-y-4">
           <button
             className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
