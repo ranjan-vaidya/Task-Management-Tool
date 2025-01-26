@@ -28,7 +28,7 @@ export const addTask = async (taskData: {
   completed: string;
 }) => {
   try {
-    const userId = auth.currentUser?.uid;
+    const userId = storedUser;
     // console.log(userId)
     if (!userId) throw new Error("User is not logged in");
 
@@ -45,7 +45,7 @@ export const addTask = async (taskData: {
 
 export const fetchTasks = async () => {
   try {
-    const userId = auth.currentUser?.uid;
+    const userId = storedUser;
     if (!userId) throw new Error("User is not logged in");
 
     // Reference to the tasks collection for the current user

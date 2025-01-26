@@ -13,6 +13,13 @@ import { ToastContainer } from "react-toastify"; // Import the ToastContainer
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
+  const storedUserString = localStorage.getItem("user");
+    if (storedUserString) {
+        var storedUser = JSON.parse(storedUserString);
+        console.log("Stored User:", storedUser);
+    } else {
+        console.log("No user found in localStorage");
+    }
   return (
     <Router>
       <ToastContainer /> {/* Place ToastContainer here */}

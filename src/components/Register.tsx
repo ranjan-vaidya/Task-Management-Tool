@@ -27,6 +27,8 @@ const SignUpPage: React.FC = () => {
         await updateProfile(userCredential.user, { displayName });
       }
 
+      // localStorage.setItem("displayName", JSON.stringify(displayName));
+      
       console.log("User signed up successfully with name:", displayName);
 
       // Navigate to another route (e.g., "/list")
@@ -46,19 +48,11 @@ const SignUpPage: React.FC = () => {
             </span>
           </div>
           <p className="mt-3 text-gray-600">
-            Create your account to get started with our powerful task management
-            app.
+            Create your account to get started with our TaskBuddy
           </p>
         </div>
 
-        {/* <form onSubmit={handleSignUp} className="space-y-4">
-          <button
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
-            onClick={() => signInWithGoogle()}
-          >
-            <img src="./img/google.png" alt="" style={{ width: "40px" }} />
-          </button>
-        </form> */}
+        
 
         <form onSubmit={handleSignUp} className="space-y-4">
 
@@ -74,6 +68,62 @@ const SignUpPage: React.FC = () => {
             Continue with Google
           </button>
         </form>
+
+
+        {/* <form onSubmit={handleSignUp} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="sr-only">
+              Full Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              required
+              className="appearance-none relative block w-full px-3 py-3 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+              placeholder="Full Name"
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="sr-only">
+              Email address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="appearance-none relative block w-full px-3 py-3 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+              placeholder="Email address"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="sr-only">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="appearance-none relative block w-full px-3 py-3 border border-gray-300 rounded-md placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
+            >
+            Sign up
+          </button>
+        </form> */}
 
 
         <p className="text-center text-sm text-gray-600">

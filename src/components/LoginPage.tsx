@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword ,updateProfile} from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword ,updateProfile} from "firebase/auth";
 import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+    const { user, loading, signInWithGoogle, signOutUser } = useAuth();
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +23,30 @@ const LoginPage: React.FC = () => {
       console.error("Error logging in:", error);
     }
   };
+  const handleSignUp = async (e: React.FormEvent) => {
+      e.preventDefault();
+  
+      try {
+        // Create a new user with email and password
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+  
+        // Update the user's profile with the display name
+        if (userCredential.user) {
+          await updateProfile(userCredential.user, { displayName });
+        }
+  
+        console.log("User signed up successfully with name:", displayName);
+  
+        // Navigate to another route (e.g., "/list")
+        navigate("/list");
+      } catch (error) {
+        console.error("Error signing up:", error);
+      }
+    };
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8">
@@ -34,9 +61,11 @@ const LoginPage: React.FC = () => {
 
 
         <div className="mt-8 space-y-4">
+        <form onSubmit={handleSignUp}>
+
           <button
             className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
-            onClick={() => console.log('Google sign in clicked')}
+            onClick={() => signInWithGoogle()}
           >
             <img
               src="https://www.google.com/favicon.ico"
@@ -45,6 +74,8 @@ const LoginPage: React.FC = () => {
             />
             Continue with Google
           </button>
+        </form>
+
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">

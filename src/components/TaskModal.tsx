@@ -24,10 +24,35 @@ const TaskModal: React.FC<TaskModalProps> = ({
 
   if (!isOpen) return null;
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const res = await addTask(formData, user); // Call addTaskForUser here to add the task
+      
+  //     setFormData({
+  //       title: "",
+  //       description: "",
+  //       category: "Work",
+  //       dueDate: "",
+  //       completed: "TO-DO",
+  //     });
+  //     if (res) {
+  //       toast.success("Task is added!");
+  //       setReload(true);
+  //     }
+  //     onClose(); // Close modal after submitting
+      
+  //   } catch (error) {
+  //     console.error("Error creating task:", error);
+  //   }
+  // };
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await addTask(formData, user); // Call addTaskForUser here to add the task
+  
       setFormData({
         title: "",
         description: "",
@@ -35,15 +60,26 @@ const TaskModal: React.FC<TaskModalProps> = ({
         dueDate: "",
         completed: "TO-DO",
       });
+  
       if (res) {
         toast.success("Task is added!");
-        setReload(true);
+  
+        // Add a 3-second timeout before setting reload or closing the modal
+        setTimeout(() => {
+          setReload(true);
+          onClose(); // Close modal after timeout
+        }, 3000);
+      } else {
+        onClose(); // Close modal immediately if no response
       }
-      onClose(); // Close modal after submitting
     } catch (error) {
       console.error("Error creating task:", error);
     }
   };
+  
+
+
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import TaskModal from "./TaskModal";
 import { useAuth } from "../hooks/useAuth";
 import { fetchTasks } from "../hooks/firebaseFunctions";
+import Header from "./Header";
 
 interface Task {
   id: string;
@@ -16,23 +17,24 @@ const TaskListView: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { user, loading, signInWithGoogle, signOutUser } = useAuth();
+
+  // const { user, loading, signInWithGoogle, signOutUser } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [reload, setReload] = useState<Boolean>(true);
   const storedUserString = localStorage.getItem("user");
-if (storedUserString) {
-  const storedUser = JSON.parse(storedUserString);
-  console.log("Stored User:", storedUser);
-} else {
-  console.log("No user found in localStorage");
-}
+  if (storedUserString) {
+    var storedUser = JSON.parse(storedUserString);
+    console.log("Stored User:", storedUser);
+  } else {
+    console.log("No user found in localStorage");
+  }
 
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
     "TO-DO": true,
-    "IN-PROGRESS": false,
-    COMPLETED: false,
+    "IN-PROGRESS": true,
+    COMPLETED: true,
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {
@@ -45,6 +47,7 @@ if (storedUserString) {
   const getTask = async () => {
     const res = await fetchTasks();
     setTasks(res);
+    console.log(res)
     setReload(false);
   };
 
@@ -52,7 +55,12 @@ if (storedUserString) {
     if (reload) {
       getTask();
     }
-  }, [reload, user?.uid]);
+    setTimeout(() => {
+      setReload(true);
+      // onClose();
+    }, 3000);
+  }, [reload, storedUser]);
+
 
   const TaskGroup: React.FC<{
     title: string;
@@ -62,9 +70,8 @@ if (storedUserString) {
   }> = ({ title, completed, tasks, bgColor }) => (
     <div className="mb-6">
       <div
-        className={`flex items-center justify-between p-3 ${bgColor} rounded-lg ${
-          !expandedSections[completed] ? "rounded-b-lg" : "rounded-b-none"
-        } cursor-pointer transition-colors hover:bg-opacity-90`}
+        className={`flex items-center justify-between p-3 ${bgColor} rounded-lg ${!expandedSections[completed] ? "rounded-b-lg" : "rounded-b-none"
+          } cursor-pointer transition-colors hover:bg-opacity-90`}
         onClick={() => toggleSection(completed)}
       >
         <h3 className="font-semibold flex items-center">
@@ -101,13 +108,12 @@ if (storedUserString) {
                       {task.dueDate}
                     </span>
                     <span
-                      className={`text-xs px-2 py-1 rounded-full ${
-                        task.completed === "TO-DO"
+                      className={`text-xs px-2 py-1 rounded-full ${task.completed === "TO-DO"
                           ? "bg-gray-100"
                           : task.completed === "IN-PROGRESS"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-green-100 text-green-800"
-                      }`}
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-green-100 text-green-800"
+                        }`}
                     >
                       {task.completed}
                     </span>
@@ -127,63 +133,7 @@ if (storedUserString) {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-6 gap-4 mb-4">
-          <div className="col-span-2">
-            <h1 className="text-xl font-bold">TaskBuddy</h1>
-          </div>
-          <div className="col-span-2 col-start-5 flex justify-end">
-            <div>
-              <img
-                src={user?.photoURL || ""}
-                alt="user"
-                className="h-8 w-8 rounded-full"
-              />
-            </div>
-            <div className="ms-3">{user?.displayName}</div>
-          </div>
-        </div>
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="flex space-x-2">
-              <button
-                onClick={() => navigate("/list")}
-                className={`px-3 py-1 rounded-md ${
-                  location.pathname === "/list"
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                List
-              </button>
-              <button
-                onClick={() => navigate("/board")}
-                className={`px-3 py-1 rounded-md ${
-                  location.pathname === "/board"
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                Board
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search"
-                className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
-            </div>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              ADD TASK
-            </button>
-          </div>
-        </div>
+        <Header />
 
         <TaskGroup
           title="Todo"
@@ -205,11 +155,11 @@ if (storedUserString) {
         />
       </div>
 
-      <TaskModal
+      {/* <TaskModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         setReload={setReload}
-      />
+      /> */}
     </div>
   );
 };

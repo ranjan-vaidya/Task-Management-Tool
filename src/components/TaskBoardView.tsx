@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import TaskModal from "./TaskModal";
 import { useAuth } from "../hooks/useAuth";
 import { fetchTasks } from "../hooks/firebaseFunctions";
+import Header from "./Header";
 
 interface Task {
   id: string;
@@ -13,91 +14,33 @@ interface Task {
 }
 
 const TaskBoardView: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [tasks, setTasks] = useState<Task[]>([]);
+    const [reload, setReload] = useState<Boolean>(true);
+    const storedUserString = localStorage.getItem("user");
+  if (storedUserString) {
+    var storedUser = JSON.parse(storedUserString);
+    console.log("Stored User:", storedUser);
+  } else {
+    console.log("No user found in localStorage");
+  }
 
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: "1",
-      title: "Interview with Design Team",
-      dueDate: "Today",
-      status: "TO-DO",
-      category: "Work",
-    },
-    {
-      id: "2",
-      title: "Team Meeting",
-      dueDate: "30 Dec, 2024",
-      status: "TO-DO",
-      category: "Personal",
-    },
-    {
-      id: "3",
-      title: "Design a Dashboard page along with wireframes",
-      dueDate: "31 Dec, 2024",
-      status: "TO-DO",
-      category: "Work",
-    },
-    {
-      id: "4",
-      title: "Morning Workout",
-      dueDate: "Today",
-      status: "IN-PROGRESS",
-      category: "Work",
-    },
-    {
-      id: "5",
-      title: "Code Review",
-      dueDate: "Today",
-      status: "IN-PROGRESS",
-      category: "Personal",
-    },
-    {
-      id: "6",
-      title: "Update Task Tracker",
-      dueDate: "25 Dec, 2024",
-      status: "IN-PROGRESS",
-      category: "Work",
-    },
-    {
-      id: "7",
-      title: "Submit Project Proposal",
-      dueDate: "Today",
-      status: "COMPLETED",
-      category: "Work",
-    },
-    {
-      id: "8",
-      title: "Birthday Gift Shopping",
-      dueDate: "Today",
-      status: "COMPLETED",
-      category: "Personal",
-    },
-    {
-      id: "9",
-      title: "Client Presentation",
-      dueDate: "25 Dec, 2024",
-      status: "COMPLETED",
-      category: "Work",
-    },
-  ]);
+  const getTask = async () => {
+      const res = await fetchTasks();
+      setTasks(res);
+      setReload(false);
+    };
 
-  
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user, loading, signInWithGoogle, signOutUser } = useAuth();
-  console.log(user, "user");
 
-  const handleAddTask = (newTask: Omit<Task, "id">) => {
-    setTasks([
-      ...tasks,
-      {
-        id: Date.now().toString(),
-        ...newTask,
-      },
-    ]);
-    setIsModalOpen(false);
-  };
 
+  useEffect(() => {
+      if (reload) {
+        getTask();
+      }
+      setTimeout(() => {
+        setReload(true);
+        // onClose();
+      }, 3000);
+    }, [reload, storedUser]);
 
 
   const TaskColumn: React.FC<{
@@ -134,102 +77,34 @@ const TaskBoardView: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-6 gap-4 mb-4">
-          <div className="col-span-2">
-            <h1 className="text-xl font-bold">TaskBuddy</h1>
-          </div>
-          <div className="col-span-2 col-start-5 flex justify-end">
-            <div>
-              <img
-                src="../../public/img/me.jpg"
-                alt="user"
-                className="h-8 w-8 rounded-full"
-              />
-            </div>
-            <div className="ms-3">{user?.displayName}</div>
-          </div>
-        </div>
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-4">
-            <div className="flex space-x-2">
-              <button
-                onClick={() => navigate("/list")}
-                className={`px-3 py-1 rounded-md ${
-                  location.pathname === "/list"
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                List
-              </button>
-              <button
-                onClick={() => navigate("/board")}
-                className={`px-3 py-1 rounded-md ${
-                  location.pathname === "/board"
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-600 hover:bg-gray-100"
-                }`}
-              >
-                Board
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search"
-                className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <span className="absolute left-3 top-2.5 text-gray-400">🔍</span>
-            </div>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-            >
-              ADD TASK
-            </button>
-          </div>
-        </div>
+        <Header />
 
-        <div className="flex space-x-4 mb-6">
-          <select className="border rounded-md px-3 py-2 bg-white">
-            <option>Category</option>
-            <option>Work</option>
-            <option>Personal</option>
-          </select>
-          <select className="border rounded-md px-3 py-2 bg-white">
-            <option>Due Date</option>
-            <option>Today</option>
-            <option>This Week</option>
-            <option>This Month</option>
-          </select>
-        </div>
+        
 
         <div className="flex space-x-6 overflow-x-auto pb-6">
           <TaskColumn
             title="TO-DO"
-            tasks={tasks.filter((task) => task.status === "TO-DO")}
+            tasks={tasks.filter((task) => task.completed === "TO-DO")}
             bgColor="bg-pink-100 text-pink-800"
           />
           <TaskColumn
             title="IN-PROGRESS"
-            tasks={tasks.filter((task) => task.status === "IN-PROGRESS")}
+            tasks={tasks.filter((task) => task.completed === "IN-PROGRESS")}
             bgColor="bg-blue-100 text-blue-800"
           />
           <TaskColumn
             title="COMPLETED"
-            tasks={tasks.filter((task) => task.status === "COMPLETED")}
+            tasks={tasks.filter((task) => task.completed === "COMPLETED")}
             bgColor="bg-green-100 text-green-800"
           />
         </div>
       </div>
 
-      <TaskModal
+      {/* <TaskModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddTask}
-      />
+      /> */}
     </div>
   );
 };
