@@ -94,7 +94,7 @@ const Header: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <div className="relative">
+                    <div className="relative hidden lg:block">
                         <input
                             type="text"
                             placeholder="Search"
