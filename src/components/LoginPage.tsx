@@ -77,7 +77,7 @@ const LoginPage: React.FC = () => {
         </form>
 
 
-          <div className="relative">
+          {/* <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
             </div>
@@ -86,9 +86,9 @@ const LoginPage: React.FC = () => {
                 or continue with email
               </span>
             </div>
-          </div>
+          </div> */}
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          {/* <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label htmlFor="email" className="sr-only">
                 Email address
@@ -148,7 +148,7 @@ const LoginPage: React.FC = () => {
             >
               Sign in
             </button>
-          </form>
+          </form> */}
 
           <p className="text-center text-sm text-gray-600">
             Don't have an account?{' '}

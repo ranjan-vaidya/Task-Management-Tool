@@ -33,11 +33,11 @@ const Header: React.FC = () => {
 
     return (
         <>
-            <div className="grid grid-cols-6 gap-4 mb-4">
+            <div className="grid grid-cols-4 gap-4 mb-4">
                 <div className="col-span-2">
                     <h1 className="text-xl font-bold">TaskBuddy</h1>
                 </div>
-                <div className="col-span-2 col-start-5 flex justify-end items-center gap-4">
+                <div className="col-span-2 col-start-5 flex justify-end items-center">
                     <div className="flex items-center">
                         <img
                             src={user?.photoURL || "../../public/img/user-image.webp"}
